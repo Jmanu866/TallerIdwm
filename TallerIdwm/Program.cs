@@ -1,23 +1,29 @@
-var builder = WebApplication.CreateBuilder(args);
+using Serilog;
 
-// Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+Log.Logger = new LoggerConfiguration()
+    .CreateLogger();
 
-var app = builder.Build();
+try {
+    Log.Information("Starting up the application...");
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Services.AddControllers();
+    builder.Host.UseSerilog((context, services, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+    );
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+
+    var app = builder.Build();
+    app.MapControllers();
+    app.Run();
+
+
+} catch (Exception ex) {
+    Log.Fatal(ex, "Application start-up failed");
+} finally {
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
