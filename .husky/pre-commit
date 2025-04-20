@@ -19,4 +19,6 @@
 ## or put your custom commands -------------------
 #echo 'Husky.Net is awesome!'
 
-feat: add Husky configuration and enhance project dependencies
+
+dotnet build
+dotnet format
