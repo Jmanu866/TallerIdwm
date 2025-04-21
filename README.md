@@ -48,17 +48,26 @@ El proyecto utiliza **Serilog** como sistema de logging estructurado con múltip
 - [Git](https://git-scm.com/)
 - [Postman](https://www.postman.com/) (para pruebas)
 - [Visual Code](https://code.visualstudio.com/) o IDE de preferencia
-Visual Studio Code or preferred IDE
+
 
 ---
 
-# Configuración de `appsettings.json`
+## Paso a Paso 
+1. ### Clonar Repositorio 
+
+```bash
+git clone https://github.com/Jmanu866/TallerIdwm.git
+
+# Navigate to the project directory
+cd TallerIdwm/TallerIdwm
+```
+2. ### Configuración de `appsettings.json`
 
 Este archivo es fundamental para el correcto funcionamiento de la aplicación. A continuación, se muestra un ejemplo mínimo funcional de `appsettings.json` utilizado en este proyecto, el cual usa **SQLite** como base de datos y **Serilog** para manejo estructurado de logs.
 
 ---
 
-##  Ejemplo de `appsettings.json`
+### Ejemplo de `appsettings.json`
 
 ```json
 {
@@ -98,33 +107,13 @@ Este archivo es fundamental para el correcto funcionamiento de la aplicación. A
 }
 ```
 
-
----
-
-## Paso a Paso 
-
-Clonar Repositorio 
-
-```bash
-git clone https://github.com/Jmanu866/TallerIdwm.git
-
-# Navigate to the project directory
-cd TallerIdwm
-```
-
-### Restaura los paquetes y herramientas
+3. ### Restaura los paquetes y herramientas
 
 ```bash
 dotnet restore
 ```
 
-### Ejecuta migraciones y base de datos (si aplica)
-
-```bash
-dotnet ef database update
-```
-
-### Ejecuta la aplicación
+4. ### Ejecuta la aplicación
 
 ```bash
 dotnet run
@@ -134,18 +123,15 @@ La API estará disponible en: [https://localhost:7123](https://localhost:7123)
 
 ---
 
-## Tareas Automatizadas con Husky.Net
+## Integrantes
 
-Este proyecto incorpora tareas `pre-commit` utilizando **Husky.Net**. Un ejemplo es:
-
-```bash
-echo "Husky.Net is awesome!"
-```
-
-Puedes ver más configuraciones en los archivos:
-
-- `task-runner.json`
-- `dotnet-tools.json`
-- `.husky/pre-commit`
+| Nombre Completo       | Correo Institucional         | RUT              |
+|------------------------|------------------------------|------------------|
+|      Josemanuel Espinoza                 |                    josemanuel.espinoza@alumnos.ucn.cl          |      21.228.513-7            |
+|            Matias Palavicino           |        matias.palavicino@alumnos.ucn.cl                      |     21.206.337-1             |
 
 ---
+
+## Licencia
+
+Proyecto de uso académico para la Universidad Católica del Norte. Todos los derechos reservados.
