@@ -12,6 +12,8 @@ namespace TallerIdwm.src.data
     public class StoreContext(DbContextOptions options) : DbContext(options)
     {
         public required DbSet<Product> Products { get; set; }
+        public required DbSet<User> Users { get; set; }
+        public required DbSet<ShippingAddress> ShippingAddresses { get; set; }
            
     }
 
