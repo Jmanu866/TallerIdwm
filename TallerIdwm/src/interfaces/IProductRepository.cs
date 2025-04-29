@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using TallerIdwm.src.models;
+
+
 namespace TallerIdwm.src.interfaces
 {
     public interface IProductRepository
     {
         Task<Product> GetProductByIdAsync(int id);
-
         Task<IEnumerable<Product>> GetProductsAsync();
-
-        Task<Product> AddProductAsync(Product product);
-
-         void DeleteProductAsync(Product product);
-
-        Task<Product> UpdateProductAsync(Product product);
-
+        Task AddProductAsync(Product product);
+        void DeleteProductAsync(Product product);
+        Task UpdateProductAsync(Product product);
 
     }
 }

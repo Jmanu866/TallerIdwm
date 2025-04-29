@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TallerIdwm.src.Mappers
+using TallerIdwm.src.models;
+using TallerIdwm.src.dtos;
+
+namespace TallerIdwm.src.mappers
 {
     public class UserMapper
     {

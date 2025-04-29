@@ -3,44 +3,43 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TallerIdwm.src.models;
 using TallerIdwm.src.data;
 using Microsoft.EntityFrameworkCore;
 
+
+
 namespace TallerIdwm.src.controllers
 {
-    [Route("[controller]")]
-    public class ProductController : Controller
+    
+    public class ProductController(ILogger<ProductController> logger, UnitOfWork unitOfWork) : BaseController
     {
-        private readonly StoreContext _context;
-        private readonly ILogger<ProductController> _logger;
-
-        public ProductController(ILogger<ProductController> logger,StoreContext context)
-        {
-            _context = context;
-            _logger = logger;
-        }
-        
-
-       
+        private readonly ILogger<ProductController> _logger = logger;
+        private readonly UnitOfWork _context = unitOfWork;
+    
         [HttpGet]
-        public ActionResult <List<Product>> GetAll()
+        public async Task<ActionResult<List<Product>>> GetAll()
         {
-            var products = _context.Products.ToList();
+
+            var products = await _context.ProductRepository.GetProductsAsync();
             return Ok(products);
+
         }
         [HttpGet("{id}")]
-        public ActionResult<Product> GetById(int id)
+        public async Task<ActionResult<Product>> GetById(int id)
         {
-            var product = _context.Products.Find(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return Ok(product);
+            var product = await _context.ProductRepository.GetProductByIdAsync(id);
+            return product == null ? (ActionResult<Product>)NotFound() : (ActionResult<Product>)Ok(product);
         }
-       
+        [HttpPost]
+        public async Task<ActionResult<Product>> Create(Product product)
+        {
+            await _context.ProductRepository.AddProductAsync(product);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+        }
     }
 }
