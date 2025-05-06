@@ -1,7 +1,13 @@
+using TallerIdwm.src.data;
+using TallerIdwm.src.interfaces;
+using TallerIdwm.src.models;
+using TallerIdwm.src.repositories;
+
 using Serilog;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using TallerIdwm.src.data;
+
+
 
 Log.Logger = new LoggerConfiguration()
     .CreateLogger();
@@ -9,7 +15,9 @@ Log.Logger = new LoggerConfiguration()
 try {
     Log.Information("Starting up the application...");
     var builder = WebApplication.CreateBuilder(args);
-    builder.Services.AddControllers();
+    builder.Services.AddControllers();;
+
+    
     builder.Services.AddDbContext<StoreContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
