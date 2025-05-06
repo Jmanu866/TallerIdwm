@@ -17,76 +17,62 @@ namespace TallerIdwm.src.repositories
         private readonly UserManager<User> _userManager = userManager;
         public IQueryable<User> GetUsersQueryable()
         {
-            return _userManager.Users.Include(u => u.ShippingAddres).AsQueryable();
+            return _userManager.Users.Include(u => u.ShippingAddress).AsQueryable();
         }
 
-        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
+        public async Task<User?> GetUserByIdAsync(string id)
         {
-            var users = await _context.Users.Include(u => u.ShippingAddress).ToListAsync();
-            return users.Select(UserMapper.MapToDto);
+            return await _userManager.Users
+                .Include(u => u.ShippingAddress)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<UserDto> GetUserByIdAsync(string firstName)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            var user = await _context.Users.Include(u => u.ShippingAddress)
-                .FirstOrDefaultAsync(u => u.FirstName == firstName)
-                ?? throw new Exception("User not found");
-
-            return UserMapper.MapToDto(user);
-        }
-
-        public async Task CreateUserAsync(User user, ShippingAddress? shippingAddress)
-        {
-            await _context.Users.AddAsync(user);
-            if (shippingAddress != null)
-            {
-                await _context.ShippingAddresses.AddAsync(shippingAddress);
-            }
-            await _context.SaveChangesAsync();
+            return await _userManager.Users
+                .Include(u => u.ShippingAddress)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task UpdateUserAsync(User user)
         {
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            await _userManager.UpdateAsync(user);
+        }
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _userManager.Users
+                .Include(u => u.ShippingAddress)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task UpdateShippingAddressAsync(UserDto userDto)
+        public async Task<bool> CheckPasswordAsync(User user, string password)
         {
-            var user = await _context.Users.Include(u => u.ShippingAddress)
-                .FirstOrDefaultAsync(u => u.FirstName == userDto.FirstName)
-                ?? throw new Exception("User not found");
-
-            if (user.ShippingAddress == null)
+            return await Task.Run(() =>
             {
-                user.ShippingAddress = new ShippingAddress
-                {
-                    Street = userDto.Street ?? string.Empty,
-                    Number = userDto.Number ?? string.Empty,
-                    Commune = userDto.Commune ?? string.Empty,
-                    Region = userDto.Region ?? string.Empty,
-                    PostalCode = userDto.PostalCode ?? string.Empty
-                };
-            }
-            else
-            {
-                user.ShippingAddress.Street = userDto.Street ?? string.Empty;
-                user.ShippingAddress.Number = userDto.Number ?? string.Empty;
-                user.ShippingAddress.Commune = userDto.Commune ?? string.Empty;
-                user.ShippingAddress.Region = userDto.Region ?? string.Empty;
-                user.ShippingAddress.PostalCode = userDto.PostalCode ?? string.Empty;
-            }
-
-            _context.ShippingAddresses.Update(user.ShippingAddress);
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+                var hasher = new PasswordHasher<User>();
+                var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
+                return result == PasswordVerificationResult.Success;
+            });
         }
 
-        public async Task DeleteUserAsync(User user, ShippingAddress shippingAddress)
+        public Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
-            _context.Users.Remove(user);
-            _context.ShippingAddresses.Remove(shippingAddress);
-            await _context.SaveChangesAsync();
+            throw new NotImplementedException();
+        }
+
+        Task<UserDto> IUserRepository.GetUserByIdAsync(string firstName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateUserAsync(User user, ShippingAddress? shippingAddress)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateShippingAddressAsync(UserDto userDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

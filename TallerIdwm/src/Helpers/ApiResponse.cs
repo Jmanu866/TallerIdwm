@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TallerIdwm.src.Helpers
+namespace TallerIdwm.src.helpers
 {
     public class ApiResponse<T>(bool success, string message, T? data = default, List<string>? errors = null)
     {

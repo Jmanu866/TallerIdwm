@@ -1,16 +1,16 @@
 
 using TallerIdwm.src.data;
 using TallerIdwm.src.dtos;
-using TallerIdwm.src.Helpers;
+using TallerIdwm.src.helpers;
 using TallerIdwm.src.interfaces;
-using TallerIdwm.src.Mappers;
+using TallerIdwm.src.mappers;
 using TallerIdwm.src.models;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace TallerIdwm.src.Controllers
+namespace TallerIdwm.src.controllers
 {
 
     public class AuthController(ILogger<AuthController> logger, UserManager<User> userManager, ITokenServices tokenService) : BaseController
@@ -53,7 +53,7 @@ namespace TallerIdwm.src.Controllers
                 var token = _tokenService.GenerateToken(user, roleName);
                 var userDto = UserMapper.UserToAuthenticatedDto(user, token);
 
-                return Ok(new ApiResponse<AuthenticatedUserDto>(true, "Usuario registrado exitosamente", userDto));
+                return Ok(new ApiResponse<AuthenticateUserDto>(true, "Usuario registrado exitosamente", userDto));
             }
             catch (Exception ex)
             {
@@ -96,7 +96,7 @@ namespace TallerIdwm.src.Controllers
                 var token = _tokenService.GenerateToken(user, roleName);
                 var userDto = UserMapper.UserToAuthenticatedDto(user, token);
 
-                return Ok(new ApiResponse<AuthenticatedUserDto>(true, "Login exitoso", userDto));
+                return Ok(new ApiResponse<AuthenticateUserDto>(true, "Login exitoso", userDto));
             }
             catch (Exception ex)
             {

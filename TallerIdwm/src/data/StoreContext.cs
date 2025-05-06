@@ -14,7 +14,7 @@ namespace TallerIdwm.src.data
     {
         public required DbSet<Product> Products { get; set; }
 
-        public required DbSet<ShippingAddres> ShippingAddres { get; set; }
+        public required DbSet<ShippingAddress> ShippingAddres { get; set; }
 
         //public required DbSet<Basket> Baskets { get; set; }
 
@@ -24,9 +24,9 @@ namespace TallerIdwm.src.data
 
 
             modelBuilder.Entity<User>()
-                    .HasOne(u => u.ShippingAddres)
+                    .HasOne(u => u.ShippingAddress)
                     .WithOne(sa => sa.User)
-                    .HasForeignKey<ShippingAddres>(sa => sa.UserId);
+                    .HasForeignKey<ShippingAddress>(sa => sa.UserId);
             List<IdentityRole> roles =
             [
                 new IdentityRole { Id = "1" ,Name = "Admin", NormalizedName = "ADMIN" },

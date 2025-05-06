@@ -8,7 +8,7 @@ using TallerIdwm.src.RequestHelpers;
 
 using Microsoft.Net.Http.Headers;
 
-namespace TallerIdwm.src.Extensions
+namespace TallerIdwm.src.extensions
 {
     public static class HttpExtensions
     {

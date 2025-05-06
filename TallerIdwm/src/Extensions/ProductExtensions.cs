@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using TallerIdwm.src.models;
 
-namespace TallerIdwm.src.Extensions
+namespace TallerIdwm.src.extensions
 {
     public static class ProductExtensions
     {

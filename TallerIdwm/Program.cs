@@ -1,11 +1,17 @@
+using System.Security.Claims;
+using System.Text;
 using TallerIdwm.src.data;
 using TallerIdwm.src.interfaces;
 using TallerIdwm.src.models;
 using TallerIdwm.src.repositories;
+using TallerIdwm.src.services;
 
 using Serilog;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 
 

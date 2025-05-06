@@ -31,7 +31,7 @@ namespace TallerIdwm.src.services
             var claims = new List<Claim>
             {
                new(JwtRegisteredClaimNames.Email, user.Email!),
-               new(JwtRegisteredClaimNames.GivenName, user.FirtsName),
+               new(JwtRegisteredClaimNames.GivenName, user.FirstName),
                new(ClaimTypes.Role, role),
             };
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

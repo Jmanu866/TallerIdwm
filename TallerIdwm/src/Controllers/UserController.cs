@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TallerIdwm.src.dtos;
 using TallerIdwm.src.models;
 using TallerIdwm.src.data;
-using TallerIdwm.src.Helpers; 
+using TallerIdwm.src.helpers; 
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
