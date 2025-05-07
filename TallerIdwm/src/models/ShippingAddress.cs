@@ -19,7 +19,7 @@ namespace TallerIdwm.src.models
 
         public string PostalCode { get; set; }
 
-        public int UserId { get; set; } // Foreign key to User
+        public string UserId { get; set; } = null!;// Foreign key to User
 
         public User User { get; set; } = null!; // Navigation property to User
     }

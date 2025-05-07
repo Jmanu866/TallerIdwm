@@ -80,6 +80,11 @@ Este archivo es fundamental para el correcto funcionamiento de la aplicación. A
   "ConnectionStrings": {
     "DefaultConnection": "Data Source=store.db"
   },
+  "JWT": {
+      "Key":"klXB1cdloHJNDwMYKJxCl4gjhHhvRe5QkdnKB+a37PFdsqeRA3tveXITszI6DUjnZ/LlghM6UZJi1m/jf+ZW8gexKHl1x5wg4M+Q4a1L8jk=",
+      "Issuer": "https://localhost:7123", 
+      "Audience": "https://localhost:7123"
+      } ,    
   "Serilog": {
     "MinimumLevel": {
       "Default": "Information",

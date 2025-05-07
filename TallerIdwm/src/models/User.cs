@@ -2,23 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace TallerIdwm.src.models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string Phone { get; set; }
+        public required string Password { get; set; } // Password hash
+        public DateTime RegisteredAt { get; set; } = DateTime.UtcNow; // Registration date
+        public DateTime? LastAccess { get; set; } // Last login timestamp
+        public bool IsActive { get; set; } = true; // Whether the user can log in
+        public string? DeactivationReason { get; set; } // Admin reason for disabling the account
 
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
-
-        public string Email { get; set; }
-
-        public string Password { get; set; }
-
-        public string Phone { get; set; }
-
+        // Navigation properties
         public ShippingAddress? ShippingAddress { get; set; }
+
+
+
     }
+
+
+
 }

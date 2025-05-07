@@ -11,7 +11,7 @@ namespace TallerIdwm.src.interfaces
 {
     public interface IUserRepository
     {
-
+        IQueryable<User> GetUsersQueryable();
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
         Task<UserDto> GetUserByIdAsync(string firstName);
         Task CreateUserAsync(User user, ShippingAddress? shippingAddress);
