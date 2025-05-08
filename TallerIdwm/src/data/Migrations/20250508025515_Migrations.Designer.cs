@@ -11,8 +11,8 @@ using TallerIdwm.src.data;
 namespace TallerIdwm.src.data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250506150816_FixUserIdType")]
-    partial class FixUserIdType
+    [Migration("20250508025515_Migrations")]
+    partial class Migrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -233,7 +233,7 @@ namespace TallerIdwm.src.data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("ShippingAddres");
+                    b.ToTable("ShippingAddress");
                 });
 
             modelBuilder.Entity("TallerIdwm.src.models.User", b =>
@@ -284,10 +284,6 @@ namespace TallerIdwm.src.data.Migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
