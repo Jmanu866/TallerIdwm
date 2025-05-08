@@ -230,7 +230,7 @@ namespace TallerIdwm.src.data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("ShippingAddres");
+                    b.ToTable("ShippingAddress");
                 });
 
             modelBuilder.Entity("TallerIdwm.src.models.User", b =>
@@ -281,10 +281,6 @@ namespace TallerIdwm.src.data.Migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")

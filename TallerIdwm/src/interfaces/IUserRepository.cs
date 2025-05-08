@@ -12,12 +12,11 @@ namespace TallerIdwm.src.interfaces
     public interface IUserRepository
     {
         IQueryable<User> GetUsersQueryable();
-        Task<IEnumerable<UserDto>> GetAllUsersAsync();
-        Task<UserDto> GetUserByIdAsync(string firstName);
-        Task CreateUserAsync(User user, ShippingAddress? shippingAddress);
-        Task UpdateUserAsync(User user);
-        Task UpdateShippingAddressAsync(UserDto userDto);
-        // Task DeleteUserAsync(User user, ShippingAddress shippingAddress);
+        Task<User?> GetUserByIdAsync(string id);
+        Task<User?> GetUserByEmailAsync(string email);
+        Task UpdateUserAsync(User user); // Save status change or profile update
+        Task<User?> GetByEmailAsync(string email);
+        Task<bool> CheckPasswordAsync(User user, string password);
 
     }
 }
