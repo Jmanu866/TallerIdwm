@@ -10,7 +10,7 @@ namespace TallerIdwm.src.data.seeders
 {
     public class ProductSeeders
     {
-         public static List<Product> GenerateProducts(int quantity = 10)
+        public static List<Product> GenerateProducts(int quantity = 10)
         {
             var faker = new Faker("es");
 

@@ -8,14 +8,14 @@ using TallerIdwm.src.interfaces;
 namespace TallerIdwm.src.data
 {
     public class UnitOfWork(StoreContext context, IProductRepository productRepository, IUserRepository userRepository)
-    {      
+    {
         private readonly StoreContext _context = context;
 
-        public IUserRepository UserRepository {get;set;} = userRepository;
+        public IUserRepository UserRepository { get; set; } = userRepository;
 
-        public IProductRepository ProductRepository {get;set;} = productRepository;
+        public IProductRepository ProductRepository { get; set; } = productRepository;
 
-        public async Task SaveChangesAsync()
+        public async Task SaveChangeAsync()
         {
             await _context.SaveChangesAsync();
         }
