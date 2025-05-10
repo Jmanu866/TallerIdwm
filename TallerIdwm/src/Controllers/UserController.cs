@@ -3,55 +3,100 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
-using TallerIdwm.src.dtos;
-using TallerIdwm.src.models;
 using TallerIdwm.src.data;
-using TallerIdwm.src.helpers; 
+using TallerIdwm.src.dtos;
+using TallerIdwm.src.extensions;
+using TallerIdwm.src.helpers;
+using TallerIdwm.src.mappers;
+using TallerIdwm.src.models;
+using TallerIdwm.src.RequestHelpers;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 namespace TallerIdwm.src.controllers
 {
     public class UserController(ILogger<UserController> logger, UnitOfWork unitOfWork) : BaseController
     {
         private readonly ILogger<UserController> _logger = logger;
-        private readonly UnitOfWork _context = unitOfWork;
+        private readonly UnitOfWork _unitOfWork = unitOfWork;
 
+
+
+        // GET /user?params...
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<ActionResult<ApiResponse<IEnumerable<UserDto>>>> GetAll([FromQuery] UserParams userParams)
         {
-            var users = await _context.UserRepository.GetAllUsersAsync();
-            return Ok(users);
-        }
-        [HttpPost]
-        public async Task<IActionResult> CreateUser( CreateUserDto userDto)
-        {
-            if (userDto.ConfirmPassword != userDto.Password)
+            var query = _unitOfWork.UserRepository.GetUsersQueryable();
+
+            if (userParams.IsActive.HasValue)
+                query = query.Where(u => u.IsActive == userParams.IsActive.Value);
+
+            if (!string.IsNullOrWhiteSpace(userParams.SearchTerm))
             {
-                return BadRequest("Passwords do not match");
+                var term = userParams.SearchTerm.ToLower();
+                query = query.Where(u =>
+                    u.FirstName.Contains(term, StringComparison.CurrentCultureIgnoreCase) ||
+                    u.LastName.Contains(term, StringComparison.CurrentCultureIgnoreCase) ||
+                    (u.Email != null && u.Email.ToLower().Contains(term)));
             }
-            var user = new User
+
+            if (userParams.RegisteredFrom.HasValue)
+                query = query.Where(u => u.RegisteredAt >= userParams.RegisteredFrom.Value);
+
+            if (userParams.RegisteredTo.HasValue)
+                query = query.Where(u => u.RegisteredAt <= userParams.RegisteredTo.Value);
+
+            var total = await query.CountAsync();
+
+            var users = await query
+                .OrderByDescending(u => u.RegisteredAt)
+                .Skip((userParams.PageNumber - 1) * userParams.PageSize)
+                .Take(userParams.PageSize)
+                .ToListAsync();
+
+            var dtos = users.Select(u => UserMapper.UserToUserDto(u)).ToList();
+
+            Response.AddPaginationHeader(new PaginationMetaData
             {
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Email = userDto.Email,
-                Password = userDto.Password,
-                Phone = userDto.Phone,
-                ShippingAddress = new ShippingAddress
-                {
-                    Street = userDto.Street ?? string.Empty,
-                    Number = userDto.Number?? string.Empty,
-                    Commune = userDto.Commune?? string.Empty,
-                    Region = userDto.Region?? string.Empty,
-                    PostalCode = userDto.PostalCode?? string.Empty
-                }
-            };
-            await _context.UserRepository.CreateUserAsync(user, user.ShippingAddress);
-            await _context.SaveChangesAsync();
-            return Ok(user);
+                CurrentPage = userParams.PageNumber,
+                TotalPages = (int)Math.Ceiling(total / (double)userParams.PageSize),
+                PageSize = userParams.PageSize,
+                TotalCount = total
+            });
+
+            return Ok(new ApiResponse<IEnumerable<UserDto>>(true, "Usuarios obtenidos correctamente", dtos));
+        }
+        [Authorize(Roles = "Admin")]
+        // GET /users/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string id)
+        {
+            var user = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
+
+            var dto = UserMapper.UserToUserDto(user);
+            return Ok(new ApiResponse<UserDto>(true, "Usuario encontrado", dto));
+        }
+        [Authorize(Roles = "Admin")]
+        // PUT /users/{id}/status
+        [HttpPut("{id}/status")]
+        public async Task<ActionResult<ApiResponse<string>>> ToggleStatus(string id, [FromBody] ToggleStatusDto dto)
+        {
+            var user = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
+
+            user.IsActive = !user.IsActive;
+            user.DeactivationReason = user.IsActive ? null : dto.Reason;
+
+            await _unitOfWork.UserRepository.UpdateUserAsync(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            var message = user.IsActive ? "Usuario habilitado correctamente" : "Usuario deshabilitado correctamente";
+            return Ok(new ApiResponse<string>(true, message));
         }
     }
 }

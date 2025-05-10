@@ -14,12 +14,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TallerIdwm.src.controllers
 {
-    
+
     public class ProductController(ILogger<ProductController> logger, UnitOfWork unitOfWork) : BaseController
     {
         private readonly ILogger<ProductController> _logger = logger;
         private readonly UnitOfWork _context = unitOfWork;
-    
+
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetAll()
         {
@@ -38,7 +38,7 @@ namespace TallerIdwm.src.controllers
         public async Task<ActionResult<Product>> Create(Product product)
         {
             await _context.ProductRepository.AddProductAsync(product);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangeAsync();
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
         }
     }

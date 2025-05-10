@@ -10,35 +10,15 @@ namespace TallerIdwm.src.mappers
 {
     public class UserMapper
     {
-        public static UserDto MapToDto(User user) => 
-        new()
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Phone = user.Phone,
-                Street = user.ShippingAddress?.Street ?? string.Empty,
-                Number = user.ShippingAddress?.Number ?? string.Empty,
-                Commune = user.ShippingAddress?.Commune ?? string.Empty,
-                Region = user.ShippingAddress?.Region ?? string.Empty,
-                PostalCode = user.ShippingAddress?.PostalCode ?? string.Empty,
-                RegisteredAt = user.RegisteredAt,
-                LastAccess = user.LastAccess,
-                IsActive = user.IsActive
-
-
-            };
-
         public static User RegisterToUser(RegisterDto dto) =>
             new()
             {
                 UserName = dto.Email,
                 Email = dto.Email,
-                FirstName = dto.FirtsName,
+                FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                Password = dto.Password,
-                PhoneNumber = dto.Thelephone,
-                Phone = dto.Thelephone,
+                PhoneNumber = dto.Phone,
+                Phone = dto.Phone,
                 RegisteredAt = DateTime.UtcNow,
                 IsActive = true,
                 ShippingAddress = new ShippingAddress
@@ -49,9 +29,24 @@ namespace TallerIdwm.src.mappers
                     Region = dto.Region ?? string.Empty,
                     PostalCode = dto.PostalCode ?? string.Empty
                 }
-            };   
-
-         public static AuthenticateUserDto UserToAuthenticatedDto(User user, string token) =>
+            };
+        public static UserDto UserToUserDto(User user) =>
+            new()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email ?? string.Empty,
+                Phone = user.PhoneNumber ?? string.Empty,
+                Street = user.ShippingAddress?.Street,
+                Number = user.ShippingAddress?.Number,
+                Commune = user.ShippingAddress?.Commune,
+                Region = user.ShippingAddress?.Region,
+                PostalCode = user.ShippingAddress?.PostalCode,
+                RegisteredAt = user.RegisteredAt,
+                LastAccess = user.LastAccess,
+                IsActive = user.IsActive
+            };
+        public static AuthenticateUserDto UserToAuthenticatedDto(User user, string token) =>
             new()
             {
                 FirstName = user.FirstName,
@@ -67,9 +62,6 @@ namespace TallerIdwm.src.mappers
                 RegisteredAt = user.RegisteredAt,
                 LastAccess = user.LastAccess,
                 IsActive = user.IsActive
-            };     
-
-
-
+            };
     }
 }

@@ -11,7 +11,7 @@ namespace TallerIdwm.src.models
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required string Phone { get; set; }
-        public required string Password { get; set; } // Password hash
+
         public DateTime RegisteredAt { get; set; } = DateTime.UtcNow; // Registration date
         public DateTime? LastAccess { get; set; } // Last login timestamp
         public bool IsActive { get; set; } = true; // Whether the user can log in

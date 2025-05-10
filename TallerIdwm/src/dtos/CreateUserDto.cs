@@ -9,11 +9,11 @@ namespace TallerIdwm.src.dtos
     public class CreateUserDto
     {
         [Required(ErrorMessage = "El nombre es obligatorio.")]
-        [StringLength(50,MinimumLength = 3, ErrorMessage = "El nombre debe tener al menos 3 caracteres.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "El nombre debe tener al menos 3 caracteres.")]
         public required string FirstName { get; set; }
 
         [Required(ErrorMessage = "El apellido es obligatorio.")]
-        [StringLength(50,MinimumLength = 3, ErrorMessage = "El apellido debe tener al menos 3 caracteres.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "El apellido debe tener al menos 3 caracteres.")]
         public required string LastName { get; set; }
 
         [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
@@ -26,13 +26,13 @@ namespace TallerIdwm.src.dtos
 
         [Required(ErrorMessage = "La contraseña es obligatoria.")]
         [StringLength(100, MinimumLength = 8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", 
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
         ErrorMessage = "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.")]
         public required string Password { get; set; }
 
         [Required(ErrorMessage = "La contraseña es obligatoria.")]
         [StringLength(100, MinimumLength = 8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
-         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", 
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
         ErrorMessage = "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.")]
 
         public required string ConfirmPassword { get; set; }
