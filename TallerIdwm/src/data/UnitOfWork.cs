@@ -17,7 +17,7 @@ namespace TallerIdwm.src.data
         public IProductRepository ProductRepository { get; set; } = productRepository;
         public IBasketRepository BasketRepository { get; set; } = basketRepository;
 
-        public async Task<int> SaveChangeAsync()
+        public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }

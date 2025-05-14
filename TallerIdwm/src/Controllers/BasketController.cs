@@ -42,7 +42,7 @@ namespace TallerIdwm.src.controllers
             if (basket == null)
             {
                 basket = CreateBasket();
-                await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.SaveChangesAsync();
             }
 
             var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(productId);
@@ -57,7 +57,7 @@ namespace TallerIdwm.src.controllers
 
             basket.AddItem(product, quantity);
 
-             var changes = await _unitOfWork.SaveChangeAsync();
+             var changes = await _unitOfWork.SaveChangesAsync();
             var success = changes > 0;
 
 
@@ -76,7 +76,7 @@ namespace TallerIdwm.src.controllers
 
             basket.RemoveItem(productId, quantity);
 
-            var success = await _unitOfWork.SaveChangeAsync() > 0;
+            var success = await _unitOfWork.SaveChangesAsync() > 0;
 
             return success
                 ? Ok(new ApiResponse<BasketDto>(
