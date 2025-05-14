@@ -7,17 +7,19 @@ using TallerIdwm.src.interfaces;
 
 namespace TallerIdwm.src.data
 {
-    public class UnitOfWork(StoreContext context, IProductRepository productRepository, IUserRepository userRepository)
-    {      
+    public class UnitOfWork(StoreContext context, IProductRepository productRepository, IUserRepository userRepository, IBasketRepository basketRepository) 
+    {
+        
         private readonly StoreContext _context = context;
 
         public IUserRepository UserRepository {get;set;} = userRepository;
 
-        public IProductRepository ProductRepository {get;set;} = productRepository;
+        public IProductRepository ProductRepository { get; set; } = productRepository;
+        public IBasketRepository BasketRepository { get; set; } = basketRepository;
 
-        public async Task SaveChangesAsync()
+        public async Task<int> SaveChangeAsync()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
     }

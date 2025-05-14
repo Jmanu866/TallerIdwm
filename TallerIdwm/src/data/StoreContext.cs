@@ -16,7 +16,7 @@ namespace TallerIdwm.src.data
 
         public required DbSet<ShippingAddress> ShippingAddres { get; set; }
 
-        //public required DbSet<Basket> Baskets { get; set; }
+        public required DbSet<Basket> Baskets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
