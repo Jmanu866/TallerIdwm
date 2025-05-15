@@ -37,8 +37,8 @@ namespace TallerIdwm.src.controllers
             {
                 var term = userParams.SearchTerm.ToLower();
                 query = query.Where(u =>
-                    u.FirstName.Contains(term, StringComparison.CurrentCultureIgnoreCase) ||
-                    u.LastName.Contains(term, StringComparison.CurrentCultureIgnoreCase) ||
+                    u.FirstName.Contains(term) ||
+                    u.LastName.Contains(term) ||
                     (u.Email != null && u.Email.ToLower().Contains(term)));
             }
 
