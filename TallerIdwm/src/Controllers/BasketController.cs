@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using TallerIdwm.src.models;
 using TallerIdwm.src.interfaces;
-using TallerIdwm.src.data;  
+using TallerIdwm.src.data;
 using TallerIdwm.src.dtos;
 using TallerIdwm.src.mappers;
 using TallerIdwm.src.helpers;
@@ -57,7 +57,7 @@ namespace TallerIdwm.src.controllers
 
             basket.AddItem(product, quantity);
 
-             var changes = await _unitOfWork.SaveChangesAsync();
+            var changes = await _unitOfWork.SaveChangesAsync();
             var success = changes > 0;
 
 
@@ -94,7 +94,7 @@ namespace TallerIdwm.src.controllers
 
             return string.IsNullOrEmpty(basketId)
                 ? null
-                : await _unitOfWork.BasketRepository. GetBasketByIdAsync(basketId);
+                : await _unitOfWork.BasketRepository.GetBasketByIdAsync(basketId);
         }
 
         private Basket CreateBasket()

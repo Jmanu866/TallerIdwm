@@ -12,7 +12,7 @@ namespace TallerIdwm.src.mappers
 {
     public static class BasketMapper
     {
-       public static BasketDto ToDto(this Basket basket)
+        public static BasketDto ToDto(this Basket basket)
         {
             return new BasketDto
             {

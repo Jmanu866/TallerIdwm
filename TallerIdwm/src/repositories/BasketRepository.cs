@@ -22,7 +22,7 @@ namespace TallerIdwm.src.repositories
 
             return basket;
         }
-        
+
         public Basket CreateBasket(string basketId)
         {
             var basket = new Basket { BasketId = basketId };
@@ -40,5 +40,5 @@ namespace TallerIdwm.src.repositories
 
 
     }
-    
+
 }

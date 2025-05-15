@@ -18,5 +18,5 @@ namespace TallerIdwm.src.models
         public required Product Product { get; set; }
         public required Basket Basket { get; set; } = null!;
     }
-    
+
 }
