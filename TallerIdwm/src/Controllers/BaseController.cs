@@ -11,6 +11,6 @@ namespace TallerIdwm.src.controllers
     [Route("api/[controller]")]
     public class BaseController : ControllerBase
     {
-        
+
     }
 }

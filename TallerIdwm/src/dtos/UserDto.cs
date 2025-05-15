@@ -11,13 +11,13 @@ namespace TallerIdwm.src.dtos
     public class UserDto
     {
 
-        public string FirstName { get; set; } 
+        public string FirstName { get; set; } = null!;
 
-        public string LastName { get; set; }
+        public string LastName { get; set; } = null!;
 
-        public string Email { get; set; }
-        
-        public string Phone { get; set; }
+        public string Email { get; set; } = null!;
+
+        public string Phone { get; set; } = null!;
 
         public string? Street { get; set; }
 
@@ -28,6 +28,7 @@ namespace TallerIdwm.src.dtos
         public string? Region { get; set; }
 
         public string? PostalCode { get; set; }
+
         public DateTime RegisteredAt { get; set; }
         public DateTime? LastAccess { get; set; }
         public bool IsActive { get; set; }

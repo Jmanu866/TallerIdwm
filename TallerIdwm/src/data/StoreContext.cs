@@ -14,7 +14,7 @@ namespace TallerIdwm.src.data
     {
         public required DbSet<Product> Products { get; set; }
 
-        public required DbSet<ShippingAddress> ShippingAddres { get; set; }
+        public required DbSet<ShippingAddress> ShippingAddress { get; set; }
 
         public required DbSet<Basket> Baskets { get; set; }
 

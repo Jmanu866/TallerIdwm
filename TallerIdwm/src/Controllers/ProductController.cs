@@ -14,12 +14,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TallerIdwm.src.controllers
 {
-    
+
     public class ProductController(ILogger<ProductController> logger, UnitOfWork unitOfWork) : BaseController
     {
         private readonly ILogger<ProductController> _logger = logger;
         private readonly UnitOfWork _context = unitOfWork;
-    
+
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetAll()
         {
