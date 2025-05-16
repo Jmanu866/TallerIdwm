@@ -12,7 +12,7 @@ using TallerIdwm.src.data;
 
 namespace TallerIdwm.src.repositories
 {
-    public class UserRepository(UserManager<User> userManager) : IUserRepository
+   public class UserRepository(UserManager<User> userManager) : IUserRepository
     {
         private readonly UserManager<User> _userManager = userManager;
         public IQueryable<User> GetUsersQueryable()
@@ -47,11 +47,13 @@ namespace TallerIdwm.src.repositories
 
         public async Task<bool> CheckPasswordAsync(User user, string password)
         {
-            var hasher = new PasswordHasher<User>();
-            var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
-            return result == PasswordVerificationResult.Success;
+            return await Task.Run(() =>
+            {
+                var hasher = new PasswordHasher<User>();
+                var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
+                return result == PasswordVerificationResult.Success;
+            });
         }
 
     }
-
 }
