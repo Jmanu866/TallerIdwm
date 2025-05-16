@@ -11,6 +11,8 @@ using TallerIdwm.src.mappers;
 using TallerIdwm.src.helpers;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace TallerIdwm.src.controllers
 {
@@ -31,11 +33,11 @@ namespace TallerIdwm.src.controllers
                 basket.ToDto()
             ));
         }
-
+        [Authorize(Roles = "User")]
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<BasketDto>>> AddItemToBasket(int productId, int quantity)
+        public async Task<ActionResult<ApiResponse<BasketDto>>> AddItemToBasket(int productId, int stock)
         {
-            _logger.LogWarning("Entrando a AddItemToBasket con productId: {ProductId}, quantity: {Quantity}", productId, quantity);
+            _logger.LogWarning("Entrando a AddItemToBasket con productId: {ProductId}, quantity: {Quantity}", productId, stock);
 
             var basket = await RetrieveBasket();
 
@@ -52,10 +54,10 @@ namespace TallerIdwm.src.controllers
             if (product.Stock == 0)
                 return BadRequest(new ApiResponse<string>(false, $"El producto '{product.Name}' no tiene stock disponible."));
 
-            if (product.Stock < quantity)
+            if (product.Stock < stock)
                 return BadRequest(new ApiResponse<string>(false, $"Solo hay {product.Stock} unidades disponibles de '{product.Name}'"));
 
-            basket.AddItem(product, quantity);
+            basket.AddItem(product, stock);
 
             var changes = await _unitOfWork.SaveChangesAsync();
             var success = changes > 0;
@@ -66,7 +68,7 @@ namespace TallerIdwm.src.controllers
                 : BadRequest(new ApiResponse<string>(false, "Ocurrió un problema al actualizar el carrito"));
         }
 
-
+        [Authorize(Roles = "User")]
         [HttpDelete]
         public async Task<ActionResult<ApiResponse<BasketDto>>> RemoveItemFromBasket(int productId, int quantity)
         {
