@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TallerIdwm.src.dtos
 {
-    public class Product
+    public class ProductDto
     {
         [Required]
         [StringLength(100, ErrorMessage = "El nombre no puede exceder los 100 caracteres")]

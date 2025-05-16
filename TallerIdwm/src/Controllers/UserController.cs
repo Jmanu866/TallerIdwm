@@ -68,6 +68,7 @@ namespace TallerIdwm.src.controllers
 
             return Ok(new ApiResponse<IEnumerable<UserDto>>(true, "Usuarios obtenidos correctamente", dtos));
         }
+        
         [Authorize(Roles = "Admin")]
         // GET /users/{id}
         [HttpGet("{id}")]
