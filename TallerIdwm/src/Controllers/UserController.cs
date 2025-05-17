@@ -14,6 +14,7 @@ using TallerIdwm.src.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 namespace TallerIdwm.src.controllers
 {
     public class UserController(ILogger<UserController> logger, UnitOfWork unitOfWork) : BaseController

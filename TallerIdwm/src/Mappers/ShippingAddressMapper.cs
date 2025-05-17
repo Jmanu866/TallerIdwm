@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using TallerIdwm.src.models;
 using TallerIdwm.src.dtos;
 
-namespace TallerIdwm.src.Mappers
+namespace TallerIdwm.src.mappers
 {
-    public static class ShippingAdressMapper
+    public static class ShippingAddressMapper
     {
         public static ShippingAddress FromDto(CreateShippingAddressDto dto, string userId)
         {

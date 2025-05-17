@@ -66,7 +66,7 @@ namespace TallerIdwm.src.mappers
        public static NewUserDto UserToNewUserDto(User user) =>
             new()
             {
-                FirstName = user.FirtsName,
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email ?? string.Empty
             };
