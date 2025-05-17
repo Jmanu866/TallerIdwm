@@ -17,7 +17,7 @@ using TallerIdwm.src.data.seeders;
 
 
 
-namespace Ayudantia.Src.Data;
+namespace TallerIdwm.src.data;
 
 public class DbInitializer
 {

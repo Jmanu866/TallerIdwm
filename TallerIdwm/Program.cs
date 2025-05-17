@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Ayudantia.Src.Data;
+using Microsoft.AspNetCore.Builder;
 
 
 
@@ -32,6 +32,10 @@ try
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<ITokenServices, TokenService>();
+    builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+    builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+    builder.Services.AddScoped<IPhotoService, PhotoService>();
+    builder.Services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
     builder.Services.AddScoped<UnitOfWork>();
     builder.Services.AddIdentity<User, IdentityRole>(opt =>
     {
@@ -89,4 +93,3 @@ finally
 {
     Log.CloseAndFlush();
 }
-
