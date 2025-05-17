@@ -34,6 +34,7 @@ try
     builder.Services.AddScoped<ITokenServices, TokenService>();
     builder.Services.AddScoped<IBasketRepository, BasketRepository>();
     builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+    builder.Services.AddScoped<IPhotoService, PhotoService>();
     builder.Services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
     builder.Services.AddScoped<UnitOfWork>();
     builder.Services.AddIdentity<User, IdentityRole>(opt =>
