@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TallerIdwm.src.dtos.User
+namespace TallerIdwm.src.dtos
 {
     public class ChangePasswordDto
     {

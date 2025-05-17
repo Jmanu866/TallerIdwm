@@ -12,7 +12,7 @@ using TallerIdwm.src.data;
 
 namespace TallerIdwm.src.repositories
 {
-   public class UserRepository(UserManager<User> userManager) : IUserRepository
+    public class UserRepository(UserManager<User> userManager) : IUserRepository
     {
         private readonly UserManager<User> _userManager = userManager;
         public IQueryable<User> GetUsersQueryable()
@@ -45,6 +45,7 @@ namespace TallerIdwm.src.repositories
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        
         public async Task<bool> CheckPasswordAsync(User user, string password)
         {
             return await Task.Run(() =>
@@ -53,6 +54,18 @@ namespace TallerIdwm.src.repositories
                 var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
                 return result == PasswordVerificationResult.Success;
             });
+        }
+        public async Task<IdentityResult> UpdatePasswordAsync(User user, string currentPassword, string newPassword)
+        => await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+
+        public Task<User?> GetUserWithAddressByIdAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<IList<string>> GetUserRolesAsync(User user)
+        {
+            return await _userManager.GetRolesAsync(user);
         }
 
     }

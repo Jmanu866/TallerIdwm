@@ -16,7 +16,7 @@ namespace TallerIdwm.src.models
         public DateTime? LastAccess { get; set; } // Last login timestamp
         public bool IsActive { get; set; } = true; // Whether the user can log in
         public string? DeactivationReason { get; set; } // Admin reason for disabling the account
-
+        public DateOnly? BirthDate { get; set; } // User's birth date
         // Navigation properties
         public ShippingAddress? ShippingAddress { get; set; }
 
