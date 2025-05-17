@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -15,6 +16,12 @@ namespace TallerIdwm.src.data.Migrations
                 table: "Products",
                 type: "TEXT",
                 nullable: true);
+
+            migrationBuilder.AddColumn<DateOnly>(
+                name: "BirthDate",
+                table: "AspNetUsers",
+                type: "TEXT",
+                nullable: true);
         }
 
         /// <inheritdoc />
@@ -23,6 +30,10 @@ namespace TallerIdwm.src.data.Migrations
             migrationBuilder.DropColumn(
                 name: "PublicId",
                 table: "Products");
+
+            migrationBuilder.DropColumn(
+                name: "BirthDate",
+                table: "AspNetUsers");
         }
     }
 }

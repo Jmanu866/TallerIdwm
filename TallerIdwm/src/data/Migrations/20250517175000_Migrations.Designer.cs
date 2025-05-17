@@ -11,7 +11,7 @@ using TallerIdwm.src.data;
 namespace TallerIdwm.src.data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250517165254_Migrations")]
+    [Migration("20250517175000_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -346,6 +346,9 @@ namespace TallerIdwm.src.data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
