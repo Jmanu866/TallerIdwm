@@ -14,7 +14,7 @@ namespace TallerIdwm.src.mappers
             new()
             {
                 UserName = dto.Email,
-                Email = dto.Email,
+                Email = dto.Email.ToLower(),
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 PhoneNumber = dto.Phone,

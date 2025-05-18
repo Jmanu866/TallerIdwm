@@ -36,27 +36,27 @@ namespace TallerIdwm.src.controllers
 
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<Product>>>> GetPaged([FromQuery] ProductParams productParams)
-    {
-        var query = _context.ProductRepository.GetQueryableProducts();
+        {
+            var query = _context.ProductRepository.GetQueryableProducts();
 
-        query = query.Search(productParams.Search)
-                     .Filter(productParams.Brands, productParams.Categories)
-                     .Sort(productParams.OrderBy);
+            query = query.Search(productParams.Search)
+                         .Filter(productParams.Brands, productParams.Categories)
+                         .Sort(productParams.OrderBy);
 
-        var pagedList = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+            var pagedList = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
 
-        if (pagedList == null || pagedList.Count == 0)
-            return Ok(new ApiResponse<IEnumerable<Product>>(false, "No hay productos disponibles"));
+            if (pagedList == null || pagedList.Count == 0)
+                return Ok(new ApiResponse<IEnumerable<Product>>(false, "No hay productos disponibles"));
 
 
-        Response.AddPaginationHeader(pagedList.Metadata);
+            Response.AddPaginationHeader(pagedList.Metadata);
 
-        return Ok(new ApiResponse<IEnumerable<Product>>(
-            true,
-            "Productos obtenidos correctamente",
-            pagedList
-        ));
-    }
+            return Ok(new ApiResponse<IEnumerable<Product>>(
+                true,
+                "Productos obtenidos correctamente",
+                pagedList
+            ));
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetById(int id)
         {
@@ -190,5 +190,7 @@ namespace TallerIdwm.src.controllers
 
             return Ok(new ApiResponse<string>(true, "Producto eliminado correctamente"));
         }
+
+        
     }
 }

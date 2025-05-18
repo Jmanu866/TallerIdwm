@@ -21,15 +21,16 @@ namespace TallerIdwm.src.repositories
             await _context.Products.AddAsync(product);
         }
 
-        public void DeleteProductAsync(Product product)
+        public Task DeleteProductAsync(Product product)
         {
             _context.Products.Remove(product);
+            return Task.CompletedTask;
         }
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
             _logger.LogWarning("Entrando a GetProductById con id: {Id}", id);
-            return  await _context.Products.FindAsync(id) ?? null;
+            return await _context.Products.FindAsync(id) ?? null;
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
@@ -41,9 +42,9 @@ namespace TallerIdwm.src.repositories
             return _context.Products.AsQueryable();
         }
 
-        public Task<bool> IsProductInOrdersAsync(int productId)
+        public async Task<bool> IsProductInOrdersAsync(int productId)
         {
-            throw new NotImplementedException();
+            return await _context.OrderItems.AnyAsync(i => i.ProductId == productId);
         }
 
         public async Task UpdateProductAsync(Product product)
@@ -60,7 +61,8 @@ namespace TallerIdwm.src.repositories
 
         Task IProductRepository.DeleteProductAsync(Product product)
         {
-            throw new NotImplementedException();
+              _context.Products.Remove(product);
+                return Task.CompletedTask;
         }
     }
 }

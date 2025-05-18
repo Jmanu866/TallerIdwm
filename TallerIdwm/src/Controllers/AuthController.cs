@@ -9,6 +9,7 @@ using TallerIdwm.src.models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 
 namespace TallerIdwm.src.controllers
@@ -75,10 +76,10 @@ namespace TallerIdwm.src.controllers
                     .FirstOrDefaultAsync(u => u.Email == loginDto.Email.ToLower());
 
                 
-
+                Log.Information("Entrando a Login con email: {Email}", loginDto.Email);
                 if (user == null)
                 {
-                    return Unauthorized(new ApiResponse<string>(false, "Correo o contraseña inválidos"));
+                    return Unauthorized(new ApiResponse<string>(false, "usuario no encontrado"));
                 }
 
                 if (!user.IsActive)

@@ -93,6 +93,66 @@ namespace TallerIdwm.src.controllers
                 : BadRequest(new ApiResponse<string>(false, "Error al actualizar el carrito"));
         }
 
+        [Authorize]
+        [HttpPut("update-quantity")]
+        public async Task<ActionResult<ApiResponse<BasketDto>>> UpdateItemQuantity(int productId, int quantity)
+        {
+            _logger.LogWarning("Entrando a UpdateItemQuantity con productId: {ProductId}, nueva cantidad: {Quantity}", productId, quantity);
+
+            if (quantity < 0)
+                return BadRequest(new ApiResponse<string>(false, "La cantidad no puede ser negativa. Usa DELETE si deseas eliminar."));
+
+            var basket = await RetrieveBasket();
+            if (basket == null)
+                return BadRequest(new ApiResponse<string>(false, "Carrito no encontrado"));
+
+            var item = basket.Items.FirstOrDefault(i => i.ProductId == productId);
+            if (item == null)
+                return NotFound(new ApiResponse<string>(false, "El producto no está en el carrito"));
+
+            if (quantity == 0)
+            {
+                basket.RemoveItem(productId, item.Quantity); // Elimina completamente el producto del carrito
+            }
+            else
+            {
+                item.Quantity = quantity;
+            }
+
+            var success = await _unitOfWork.SaveChangesAsync() > 0;
+
+            return success
+                ? Ok(new ApiResponse<BasketDto>(true, "Cantidad actualizada correctamente", basket.ToDto()))
+                : BadRequest(new ApiResponse<string>(false, "Error al actualizar la cantidad"));
+        }
+
+        [Authorize]
+        [HttpGet("empty")]
+        public async Task<ActionResult<ApiResponse<object>>> GetBasketStatus()
+        {
+            var basket = await RetrieveBasket();
+
+            if (basket == null || !basket.Items.Any())
+            {
+                return Ok(new ApiResponse<object>(true, "El carrito está vacío", new
+                {
+                    isEmpty = true,
+                    itemCount = 0,
+                    total = 0
+                }));
+            }
+
+            var itemCount = basket.Items.Sum(i => i.Quantity);
+            var total = basket.Items.Sum(i => i.Quantity * i.Product.Price);
+
+            return Ok(new ApiResponse<object>(true, "El carrito tiene productos", new
+            {
+                isEmpty = false,
+                itemCount,
+                total
+            }));
+        }
+
         private async Task<Basket?> RetrieveBasket()
         {
             var basketId = Request.Cookies["basketId"];
