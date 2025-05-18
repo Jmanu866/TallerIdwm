@@ -29,7 +29,7 @@ namespace TallerIdwm.src.repositories
         public async Task<Product> GetProductByIdAsync(int id)
         {
             _logger.LogWarning("Entrando a GetProductById con id: {Id}", id);
-            return await _context.Products.FindAsync(id) ?? throw new Exception("Product not found");
+            return await _context.Products.FindAsync(id) ?? null;
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
