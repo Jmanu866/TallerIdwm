@@ -256,7 +256,7 @@ namespace TallerIdwm.src.data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("TallerIdwm.src.models.Product", b =>

@@ -11,7 +11,7 @@ using TallerIdwm.src.data;
 namespace TallerIdwm.src.data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250518155806_Migrations")]
+    [Migration("20250518233507_Migrations")]
     partial class Migrations
     {
         /// <inheritdoc />
@@ -259,7 +259,7 @@ namespace TallerIdwm.src.data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("TallerIdwm.src.models.Product", b =>
