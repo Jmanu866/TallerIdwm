@@ -69,19 +69,20 @@ namespace TallerIdwm.src.controllers
 
             return Ok(new ApiResponse<IEnumerable<UserDto>>(true, "Usuarios obtenidos correctamente", dtos));
         }
-
-        [Authorize(Roles = "Admin")]
+         [Authorize(Roles = "Admin")]
         // GET /users/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string id)
+        [HttpGet("{email}")]
+        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string email)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
                 return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
 
             var dto = UserMapper.UserToUserDto(user);
             return Ok(new ApiResponse<UserDto>(true, "Usuario encontrado", dto));
         }
+
+      
         [Authorize(Roles = "Admin")]
         // PUT /users/{id}/status
         [HttpPut("{id}/status")]
