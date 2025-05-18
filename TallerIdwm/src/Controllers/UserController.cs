@@ -100,7 +100,7 @@ namespace TallerIdwm.src.controllers
             var message = user.IsActive ? "Usuario habilitado correctamente" : "Usuario deshabilitado correctamente";
             return Ok(new ApiResponse<string>(true, message));
         }
-         [Authorize(Roles = "User")]
+        [Authorize(Roles = "User")]
         [HttpPost("address")]
         public async Task<ActionResult<ApiResponse<ShippingAddress>>> CreateShippingAddress([FromBody] CreateShippingAddressDto dto)
         {
