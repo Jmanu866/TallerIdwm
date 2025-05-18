@@ -19,6 +19,7 @@ using TallerIdwm.src.RequestHelpers;
 
 using Microsoft.AspNetCore.Authorization;
 using TallerIdwm.src.Helpers;
+using TallerIdwm.src.extensions;
 
 
 
@@ -34,13 +35,28 @@ namespace TallerIdwm.src.controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAll()
-        {
+        public async Task<ActionResult<ApiResponse<IEnumerable<Product>>>> GetPaged([FromQuery] ProductParams productParams)
+    {
+        var query = _context.ProductRepository.GetQueryableProducts();
 
-            var products = await _context.ProductRepository.GetProductsAsync();
-            return Ok(products);
+        query = query.Search(productParams.Search)
+                     .Filter(productParams.Brands, productParams.Categories)
+                     .Sort(productParams.OrderBy);
 
-        }
+        var pagedList = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+
+        if (pagedList == null || pagedList.Count == 0)
+            return Ok(new ApiResponse<IEnumerable<Product>>(false, "No hay productos disponibles"));
+
+
+        Response.AddPaginationHeader(pagedList.Metadata);
+
+        return Ok(new ApiResponse<IEnumerable<Product>>(
+            true,
+            "Productos obtenidos correctamente",
+            pagedList
+        ));
+    }
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetById(int id)
         {
