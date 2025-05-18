@@ -41,6 +41,11 @@ namespace TallerIdwm.src.repositories
             return _context.Products.AsQueryable();
         }
 
+        public Task<bool> IsProductInOrdersAsync(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task UpdateProductAsync(Product product)
         {
             var existingProduct = await _context.Products.FindAsync(product.Id) ?? throw new Exception("Product not found");
@@ -51,6 +56,11 @@ namespace TallerIdwm.src.repositories
             existingProduct.Urls = product.Urls;
             existingProduct.Brand = product.Brand;
             _context.Products.Update(existingProduct);
+        }
+
+        Task IProductRepository.DeleteProductAsync(Product product)
+        {
+            throw new NotImplementedException();
         }
     }
 }
