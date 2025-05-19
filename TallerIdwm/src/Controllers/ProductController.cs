@@ -15,6 +15,12 @@ using TallerIdwm.src.mappers;
 using TallerIdwm.src.interfaces;
 using TallerIdwm.src.services;
 
+using TallerIdwm.src.RequestHelpers;
+
+using Microsoft.AspNetCore.Authorization;
+using TallerIdwm.src.Helpers;
+using TallerIdwm.src.extensions;
+
 
 
 namespace TallerIdwm.src.controllers
@@ -29,12 +35,27 @@ namespace TallerIdwm.src.controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAll()
+        public async Task<ActionResult<ApiResponse<IEnumerable<Product>>>> GetPaged([FromQuery] ProductParams productParams)
         {
+            var query = _context.ProductRepository.GetQueryableProducts();
 
-            var products = await _context.ProductRepository.GetProductsAsync();
-            return Ok(products);
+            query = query.Search(productParams.Search)
+                         .Filter(productParams.Brands, productParams.Categories)
+                         .Sort(productParams.OrderBy);
 
+            var pagedList = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+
+            if (pagedList == null || pagedList.Count == 0)
+                return Ok(new ApiResponse<IEnumerable<Product>>(false, "No hay productos disponibles"));
+
+
+            Response.AddPaginationHeader(pagedList.Metadata);
+
+            return Ok(new ApiResponse<IEnumerable<Product>>(
+                true,
+                "Productos obtenidos correctamente",
+                pagedList
+            ));
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetById(int id)
@@ -49,7 +70,8 @@ namespace TallerIdwm.src.controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
         }
-        [HttpPost("Create")]
+        [Authorize(Roles = "Admin")]
+        [HttpPost("create")]
         public async Task<ActionResult<ApiResponse<Product>>> Create([FromForm] ProductDto dto)
         {
             var urls = new List<string>();
@@ -62,7 +84,7 @@ namespace TallerIdwm.src.controllers
                 {
                     return BadRequest(new ApiResponse<Product>(
                         false,
-                        "Error uploading image",
+                        "Error al agregar la imagen",
                         null,
                         new List<string> { result.Error.Message }
                     ));
@@ -80,8 +102,95 @@ namespace TallerIdwm.src.controllers
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = product.Id },
-                new ApiResponse<Product>(true, "Product created successfully", product)
+                new ApiResponse<Product>(true, "Producto agregado correctamente", product)
             );
         }
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ApiResponse<Product>>> Update(int id, [FromForm] ProductDto dto)
+        {
+            var product = await _context.ProductRepository.GetProductByIdAsync(id);
+            if (product == null)
+                return NotFound(new ApiResponse<Product>(false, "Producto no encontrado"));
+
+
+            if (dto.Images.Any())
+            {
+                // Eliminar TODAS las imágenes anteriores usando las URLs
+                if (product.Urls != null && product.Urls.Any())
+                {
+                    foreach (var url in product.Urls)
+                    {
+                        var oldPublicId = CloudinaryHelper.ExtractPublicIdFromUrl(url);
+                        if (!string.IsNullOrEmpty(oldPublicId))
+                            await _photoService.DeletePhotoAsync(oldPublicId);
+                    }
+                }
+
+                // Subir la nueva imagen (puedes extender a varias si lo permites)
+                var result = await _photoService.AddPhotoAsync(dto.Images.First());
+                if (result.Error != null)
+                {
+                    return BadRequest(new ApiResponse<Product>(
+                        false,
+                        "Error al subir nueva imagen",
+                        null,
+                        new List<string> { result.Error.Message }
+                    ));
+                }
+
+                product.Urls = new List<string> { result.SecureUrl.AbsoluteUri };
+                product.PublicId = result.PublicId;
+            }
+
+            // Actualizar datos básicos
+            product.Name = dto.Name;
+            product.Description = dto.Description;
+            product.Price = dto.Price;
+            product.Category = dto.Category;
+            product.Brand = dto.Brand;
+            product.Stock = dto.Stock;
+
+            await _context.ProductRepository.UpdateProductAsync(product);
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponse<Product>(true, "Producto actualizado correctamente", product));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ApiResponse<string>>> Delete(int id)
+        {
+            var product = await _context.ProductRepository.GetProductByIdAsync(id);
+            if (product == null)
+                return NotFound(new ApiResponse<string>(false, "Producto no encontrado"));
+
+            bool isInOrders = await _context.ProductRepository.IsProductInOrdersAsync(id);
+            if (isInOrders)
+            {
+                product.IsActive = false;
+                await _context.ProductRepository.UpdateProductAsync(product);
+                await _context.SaveChangesAsync();
+
+                return Ok(new ApiResponse<string>(true, "Producto desactivado correctamente (asociado a pedidos)"));
+            }
+
+            if (product.Urls != null && product.Urls.Any())
+            {
+                foreach (var url in product.Urls)
+                {
+                    var publicId = CloudinaryHelper.ExtractPublicIdFromUrl(url);
+                    if (!string.IsNullOrEmpty(publicId))
+                        await _photoService.DeletePhotoAsync(publicId);
+                }
+            }
+
+            await _context.ProductRepository.DeleteProductAsync(product);
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponse<string>(true, "Producto eliminado correctamente"));
+        }
+
+        
     }
 }

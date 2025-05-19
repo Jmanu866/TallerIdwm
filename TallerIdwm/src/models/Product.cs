@@ -17,6 +17,10 @@ namespace TallerIdwm.src.models
 
         public int Stock { get; set; }
         public required string Brand { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        
         public string? PublicId { get; set; }
 
     }

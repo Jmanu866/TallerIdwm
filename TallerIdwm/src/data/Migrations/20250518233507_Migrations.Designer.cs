@@ -11,8 +11,8 @@ using TallerIdwm.src.data;
 namespace TallerIdwm.src.data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250516041345_OrderMigrations")]
-    partial class OrderMigrations
+    [Migration("20250518233507_Migrations")]
+    partial class Migrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -259,7 +259,7 @@ namespace TallerIdwm.src.data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("TallerIdwm.src.models.Product", b =>
@@ -280,11 +280,17 @@ namespace TallerIdwm.src.data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Stock")
@@ -343,6 +349,9 @@ namespace TallerIdwm.src.data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

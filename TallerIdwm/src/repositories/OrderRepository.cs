@@ -27,12 +27,6 @@ namespace TallerIdwm.src.repositories
                 .ToListAsync();
         }
 
-        public async Task<Order?> GetOrderByIdAsync(int orderId, string userId)
-        {
-            return await _context.Orders
-                .Include(o => o.Items)
-                .FirstOrDefaultAsync(o => o.Id == orderId && o.UserId == userId);
-        }
 
         public async Task<List<Order>> GetAllOrdersAsync()
         {
@@ -41,7 +35,12 @@ namespace TallerIdwm.src.repositories
                 .Include(o => o.User)
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
-        } 
+        }
+
+        public Task<Order?> GetOrderByIdAsync(int orderId, string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
    
 }

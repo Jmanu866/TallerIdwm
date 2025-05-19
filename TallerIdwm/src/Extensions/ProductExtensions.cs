@@ -39,14 +39,14 @@ namespace TallerIdwm.src.extensions
         }
         public static IQueryable<Product> Sort(this IQueryable<Product> query, string? orderBy)
         {
-            query = orderBy switch
+            return orderBy?.ToLower() switch
             {
-                "price" => query.OrderBy(p => p.Price),
-                "priceDesc" => query.OrderByDescending(p => p.Price),
-                _ => query.OrderBy(p => p.Name)
+                "priceasc" => query.OrderBy(p => (double)p.Price),
+                "pricedesc" => query.OrderByDescending(p => (double)p.Price),
+                "nameasc" => query.OrderBy(p => p.Name),
+                "namedesc" => query.OrderByDescending(p => p.Name),
+                _ => query.OrderBy(p => p.Name) // valor por defecto
             };
-            return query;
         }
-
     }
 }

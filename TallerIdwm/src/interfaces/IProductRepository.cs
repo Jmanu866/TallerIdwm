@@ -13,8 +13,10 @@ namespace TallerIdwm.src.interfaces
         Task<Product> GetProductByIdAsync(int id);
         Task<IEnumerable<Product>> GetProductsAsync();
         Task AddProductAsync(Product product);
-        void DeleteProductAsync(Product product);
+        Task DeleteProductAsync(Product product);
         Task UpdateProductAsync(Product product);
+        Task<bool> IsProductInOrdersAsync(int productId);
 
+        IQueryable<Product> GetQueryableProducts();
     }
 }

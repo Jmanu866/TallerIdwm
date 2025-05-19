@@ -14,7 +14,7 @@ namespace TallerIdwm.src.mappers
             new()
             {
                 UserName = dto.Email,
-                Email = dto.Email,
+                Email = dto.Email.ToLower(),
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 PhoneNumber = dto.Phone,
@@ -72,8 +72,8 @@ namespace TallerIdwm.src.mappers
             };
         public static void UpdateUserFromDto(User user, UpdateProfileDto dto)
         {
-            if (dto.FirtsName is not null)
-                user.FirstName = dto.FirtsName;
+            if (dto.FirstName is not null)
+                user.FirstName = dto.FirstName;
 
             if (dto.LastName is not null)
                 user.LastName = dto.LastName;
