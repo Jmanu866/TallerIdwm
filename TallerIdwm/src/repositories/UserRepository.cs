@@ -45,13 +45,28 @@ namespace TallerIdwm.src.repositories
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        
         public async Task<bool> CheckPasswordAsync(User user, string password)
         {
-            var hasher = new PasswordHasher<User>();
-            var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
-            return result == PasswordVerificationResult.Success;
+            return await Task.Run(() =>
+            {
+                var hasher = new PasswordHasher<User>();
+                var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
+                return result == PasswordVerificationResult.Success;
+            });
+        }
+        public async Task<IdentityResult> UpdatePasswordAsync(User user, string currentPassword, string newPassword)
+        => await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+
+        public Task<User?> GetUserWithAddressByIdAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<IList<string>> GetUserRolesAsync(User user)
+        {
+            return await _userManager.GetRolesAsync(user);
         }
 
     }
-
 }

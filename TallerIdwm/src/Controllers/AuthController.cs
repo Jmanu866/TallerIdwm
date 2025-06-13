@@ -8,6 +8,8 @@ using TallerIdwm.src.models;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 
 namespace TallerIdwm.src.controllers
@@ -69,10 +71,15 @@ namespace TallerIdwm.src.controllers
                 if (!ModelState.IsValid)
                     return BadRequest(new ApiResponse<string>(false, "Datos inválidos", null, ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()));
 
-                var user = await _userManager.FindByEmailAsync(loginDto.Email);
+                var user = await _userManager.Users
+                    .Include(u => u.ShippingAddress)
+                    .FirstOrDefaultAsync(u => u.Email == loginDto.Email.ToLower());
+
+                
+                Log.Information("Entrando a Login con email: {Email}", loginDto.Email);
                 if (user == null)
                 {
-                    return Unauthorized(new ApiResponse<string>(false, "Correo o contraseña inválidos"));
+                    return Unauthorized(new ApiResponse<string>(false, "usuario no encontrado"));
                 }
 
                 if (!user.IsActive)

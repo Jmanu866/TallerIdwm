@@ -28,6 +28,7 @@ namespace TallerIdwm.src.dtos
         public string? Region { get; set; }
 
         public string? PostalCode { get; set; }
+        public DateOnly? BirthDate { get; set; }
 
         public DateTime RegisteredAt { get; set; }
         public DateTime? LastAccess { get; set; }

@@ -14,7 +14,7 @@ namespace TallerIdwm.src.mappers
             new()
             {
                 UserName = dto.Email,
-                Email = dto.Email,
+                Email = dto.Email.ToLower(),
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 PhoneNumber = dto.Phone,
@@ -63,5 +63,29 @@ namespace TallerIdwm.src.mappers
                 LastAccess = user.LastAccess,
                 IsActive = user.IsActive
             };
+       public static NewUserDto UserToNewUserDto(User user) =>
+            new()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email ?? string.Empty
+            };
+        public static void UpdateUserFromDto(User user, UpdateProfileDto dto)
+        {
+            if (dto.FirstName is not null)
+                user.FirstName = dto.FirstName;
+
+            if (dto.LastName is not null)
+                user.LastName = dto.LastName;
+
+            if (dto.Email is not null)
+                user.Email = dto.Email;
+
+            if (dto.Phone is not null)
+                user.Phone = dto.Phone;
+
+            if (dto.BirthDate.HasValue)
+                user.BirthDate = dto.BirthDate.Value;
+        }     
     }
 }
