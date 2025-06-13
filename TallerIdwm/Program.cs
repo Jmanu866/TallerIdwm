@@ -25,8 +25,29 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
+
+
+
+
+
     // creacion de patron del builder de .net para crear la aplicacion
     var builder = WebApplication.CreateBuilder(args);
+    
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(
+            builder =>
+            {
+                builder.WithOrigins("http://localhost:3000");
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+                builder.AllowCredentials();
+            });
+    });
+
+
+
+
     builder.Services.AddControllers();
     builder.Services.AddTransient<ExceptionMIddleware>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -76,6 +97,7 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+
     // corremos la aplicacion
     // app.Run() es el metodo que se encarga de correr la aplicacion y escuchar las peticiones
     app.Run();
