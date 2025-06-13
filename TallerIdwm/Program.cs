@@ -32,7 +32,7 @@ try
 
     // creacion de patron del builder de .net para crear la aplicacion
     var builder = WebApplication.CreateBuilder(args);
-    
+
     builder.Services.AddCors(options =>
     {
         options.AddDefaultPolicy(
@@ -94,6 +94,8 @@ try
     var app = builder.Build();
     app.UseMiddleware<ExceptionMIddleware>();
     await DbInitializer.InitDb(app);
+
+    app.UseCors();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
